@@ -10,10 +10,10 @@
   "keywords": [
     "react-native"
   ],
-  "author": "reecedantin",
+  "author": "gcarling",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reecedantin/react-native-screenshot-detector"
+    "url": "https://github.com/blendlabs/react-native-screenshot-detector"
   },
   "license": "MIT"
 }
