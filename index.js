@@ -5,11 +5,12 @@ const { RNScreenshotDetector } = NativeModules;
 export const SCREENSHOT_EVENT = 'ScreenshotTaken';
 
 export function subscribe(cb) {
-  const eventEmitter = new NativeEventEmitter(RNScreenshotDetector);
-  eventEmitter.addListener(SCREENSHOT_EVENT, cb, {});
-  return eventEmitter;
+    RNScreenshotDetector.startlistening(() => {});
+    const eventEmitter = new NativeEventEmitter(RNScreenshotDetector);
+    const subscription = eventEmitter.addListener(SCREENSHOT_EVENT, cb);
+    return subscription
 }
 
-export function unsubscribe(eventEmitter) {
-  eventEmitter.removeAllListeners(SCREENSHOT_EVENT);
+export function unsubscribe(subscription) {
+    subscription.remove();
 }

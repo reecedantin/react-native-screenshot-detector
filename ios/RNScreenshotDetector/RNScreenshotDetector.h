@@ -9,7 +9,4 @@
 
 @interface RNScreenshotDetector : RCTEventEmitter <RCTBridgeModule>
 
-- (void)setupAndListen:(RCTBridge*)bridge;
-- (void)screenshotDetected:(NSNotification*)notification;
-
 @end
