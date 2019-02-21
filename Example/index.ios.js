@@ -16,8 +16,14 @@ import {
 
 export default class Example extends Component {
   componentDidMount() {
-    this.eventEmitter = ScreenshotDetector.subscribe(() => {
-      Alert.alert('Screenshot detected!');
+    this.eventEmitter = ScreenshotDetector.subscribe((info) {
+        if(info.type == "start_record") {
+            Alert.alert('Screen Record Started!');
+        } else if(info.type == "stop_record") {
+            Alert.alert('Screen Record Stopped!');
+        } else if(info.type == "screenshot") {
+            Alert.alert('Screenshot Detected!');
+        }
     });
   }
 

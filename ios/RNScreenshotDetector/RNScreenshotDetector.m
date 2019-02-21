@@ -5,6 +5,7 @@
 //
 
 #import "RNScreenshotDetector.h"
+#import <React/RCTRootView.h>
 
 @implementation RNScreenshotDetector
 
@@ -24,11 +25,42 @@ RCT_EXPORT_METHOD(startlistening:(RCTResponseSenderBlock)callback)
                                                       [self screenshotDetected:notification];
                                                   }];
 
-    callback(@[[NSNull null]]);
+    if (@available(iOS 11.0, *)) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIScreenCapturedDidChangeNotification
+                                                          object:nil
+                                                           queue:mainQueue
+                                                      usingBlock:^(NSNotification *notification) {
+                                                          [self screenshotDetected:notification];
+                                                      }];
+    } else {
+        // Fallback on earlier versions
+    }
+
+    if (@available(iOS 11.0, *)) {
+        if([UIScreen mainScreen].isCaptured) {
+            callback(@[@true]);
+        } else {
+            callback(@[@false]);
+        }
+    } else {
+        callback(@[[NSNull null]]);
+    }
 }
 
 - (void)screenshotDetected:(NSNotification *)notification {
-    [self sendEventWithName:@"ScreenshotTaken" body:nil];
+    NSString * type;
+    if (@available(iOS 11.0, *)) {
+        if(notification.name == UIScreenCapturedDidChangeNotification) {
+            type = ((UIScreen *)notification.object).isCaptured ? @"start_record" : @"stop_record";
+        } else {
+            type = @"screenshot";
+        }
+    } else {
+        type = @"screenshot";
+    }
+
+
+    [self sendEventWithName:@"ScreenshotTaken" body:@{@"type": type}];
 }
 
 @end
