@@ -32,8 +32,6 @@ RCT_EXPORT_METHOD(startlistening:(RCTResponseSenderBlock)callback)
                                                       usingBlock:^(NSNotification *notification) {
                                                           [self screenshotDetected:notification];
                                                       }];
-    } else {
-        // Fallback on earlier versions
     }
 
     if (@available(iOS 11.0, *)) {
@@ -59,8 +57,9 @@ RCT_EXPORT_METHOD(startlistening:(RCTResponseSenderBlock)callback)
         type = @"screenshot";
     }
 
-
-    [self sendEventWithName:@"ScreenshotTaken" body:@{@"type": type}];
+    dispatch_async(dispatch_get_main_queue(), ^{
+           [self sendEventWithName:@"ScreenshotTaken" body:@{@"type": type}];
+    });
 }
 
 @end
